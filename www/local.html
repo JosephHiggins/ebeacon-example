@@ -32,7 +32,8 @@
     <body>
         <div class="app">
             <button id="demo">Start Capture</button>
-            <div id="pictures"></div>
+            <img id="picture1" src=""/>
+	
         </div>
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript">
@@ -47,7 +48,7 @@
                 var rekt = {x: 0, y: 0, width: 300, height: 300}; 
                 
                 cordova.plugins.camerapreview.setOnPictureTakenHandler(function(result){
-    				document.getElementById('pictures').innerHTML += '<img src="'+result[1]+'" />';//previewPicturePath;
+    				document.getElementById('picture1').src = result[1];//previewPicturePath;
 				});
 				
 				document.querySelector("#demo").addEventListener("touchend", function() {
