@@ -32,7 +32,7 @@
     <body>
         <div class="app">
             <button id="demo">Start Capture</button>
-            <div id="videoArea"></div>
+            <div id="pictures"></div>
         </div>
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript">
@@ -42,21 +42,25 @@
             document.addEventListener('deviceready', deviceReady, false);
 
             function deviceReady(){
-                document.querySelector("#demo").addEventListener("touchend", function() {
-                    navigator.device.capture.captureVideo(captureSuccess, captureError, {limit: 1});
-                }, false);
+                var rekt = {x: 0, y: 0, width: 300, height: 300}; 
+                
+                cordova.plugins.camerapreview.setOnPictureTakenHandler(function(result){
+    				document.getElementById('pictures').innerHTML =+ '<img src="'+result[1]+'" />';//previewPicturePath;
+				});
+				
+				document.querySelector("#demo").addEventListener("touchend", function() {
+					cordova.plugins.camerapreview.startCamera(rekt,"front",true,true,false); 
+					window.setTimeout(toggleCamera, 1000);
+				}, false); 
+            }
+            
+            function toggleCamera(){
+             	cordova.plugins.camerapreview.takePicture({maxWidth:300, maxHeight:300});
+            	cordova.plugins.camerapreview.switchCamera();
+            	window.setTimeout(toggleCamera, 1000); 
             }
 
-            function captureSuccess(s) {
-                var v = "<video controls='controls' style=\"max-height: 500px;\">";
-                v += "<source src='" + s[0].fullPath + "' type='video/mp4'>";
-                v += "</video>";
-                document.querySelector("#videoArea").innerHTML = v;
-            }
-
-            function captureError(e){
-                alert(e);
-            }
+            
         </script>
     </body>
 </html>
